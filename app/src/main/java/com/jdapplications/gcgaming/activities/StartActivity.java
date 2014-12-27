@@ -31,6 +31,7 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
+        getSupportActionBar().setTitle("Login");
         registerTextView = (TextView) findViewById(R.id.registerAsNew);
         registerTextView.setOnClickListener(this);
         loginSubmitButton = (Button) findViewById(R.id.buttonLogin);

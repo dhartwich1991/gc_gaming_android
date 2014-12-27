@@ -6,6 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.jdapplications.gcgaming"
+
         minSdkVersion 14
         targetSdkVersion 21
         versionCode 1
