@@ -19,10 +19,10 @@
         </activity>
         <activity
             android:name=".activities.RegisterActivity"
-            android:label="Register new user"></activity>
+            android:label="Register new user" />
         <activity
             android:name=".activities.AvailableRaidsActivity"
-            android:label="@string/title_activity_available_raids"></activity>
+            android:label="@string/title_activity_available_raids" />
     </application>
 
 </manifest>
