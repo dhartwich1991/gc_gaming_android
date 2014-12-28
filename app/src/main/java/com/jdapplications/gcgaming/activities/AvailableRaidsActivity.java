@@ -78,6 +78,11 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onError(Exception e) {
+                Toast.makeText(AvailableRaidsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
         }).execute();
     }
 

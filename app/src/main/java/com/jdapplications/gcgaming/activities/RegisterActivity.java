@@ -16,7 +16,7 @@ import com.jdapplications.gcgaming.tasks.RegisterTask;
 public class RegisterActivity extends ActionBarActivity implements View.OnClickListener, OnAsyncResultListener {
     private EditText usernameField, passwordField;
     private Button submitButton;
-    private com.jdapplications.gcgaming.listener.OnAsyncResultListener asyncListener;
+    private OnAsyncResultListener asyncListener;
     private RegisterTask task;
 
     @Override
@@ -27,14 +27,7 @@ public class RegisterActivity extends ActionBarActivity implements View.OnClickL
         passwordField = (EditText) findViewById(R.id.passwordField);
         submitButton = (Button) findViewById(R.id.submitButton);
         submitButton.setOnClickListener(this);
-        asyncListener = new com.jdapplications.gcgaming.listener.OnAsyncResultListener() {
-            @Override
-            public void onResult(String response) {
-                Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_LONG).show();
-                submitButton.setEnabled(true);
-            }
-        };
-
+        setOnAsyncResultListener(this);
     }
 
 
@@ -74,6 +67,16 @@ public class RegisterActivity extends ActionBarActivity implements View.OnClickL
     public void onResult(String response) {
         Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_LONG).show();
         submitButton.setEnabled(true);
+    }
+
+    @Override
+    public void onError(Exception e) {
+        Toast.makeText(RegisterActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        submitButton.setEnabled(true);
+    }
+
+    void setOnAsyncResultListener(OnAsyncResultListener listener) {
+        this.asyncListener = listener;
     }
 }
 

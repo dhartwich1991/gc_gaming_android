@@ -5,4 +5,5 @@ package com.jdapplications.gcgaming.listener;
  */
 public interface OnAsyncResultListener {
     void onResult(String response);
+    void onError(Exception e);
 }

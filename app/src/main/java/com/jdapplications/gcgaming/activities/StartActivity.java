@@ -19,11 +19,11 @@ import com.jdapplications.gcgaming.tasks.RegisterTask;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class StartActivity extends ActionBarActivity implements View.OnClickListener {
+public class StartActivity extends ActionBarActivity implements View.OnClickListener, OnAsyncResultListener {
     private TextView registerTextView;
     private Button loginSubmitButton;
     private LoginTask task;
-    com.jdapplications.gcgaming.listener.OnAsyncResultListener asyncListener;
+    private OnAsyncResultListener asyncListener;
     private EditText userLoginName, userLoginPassword;
     private JSONObject jsonResponse;
 
@@ -38,25 +38,7 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
         loginSubmitButton.setOnClickListener(this);
         userLoginName = (EditText) findViewById(R.id.userLoginName);
         userLoginPassword = (EditText) findViewById(R.id.userLoginPassword);
-
-        asyncListener = new OnAsyncResultListener() {
-            @Override
-            public void onResult(String response) {
-                Toast.makeText(StartActivity.this, response, Toast.LENGTH_SHORT).show();
-                loginSubmitButton.setEnabled(true);
-                try {
-                    jsonResponse = new JSONObject(response);
-                    if(jsonResponse.getInt("code") == 0){
-                        //TODO: Save Login and Password in SharedPreferences here
-                        Toast.makeText(StartActivity.this, "Welcome, "+userLoginName.getText().toString(), Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(StartActivity.this, AvailableRaidsActivity.class));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
+        setOnAsyncResultListener(this);
     }
 
 
@@ -91,5 +73,33 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
             task.execute(userLoginName.getText().toString(), userLoginPassword.getText().toString());
             loginSubmitButton.setEnabled(false);
         }
+    }
+
+    void setOnAsyncResultListener(OnAsyncResultListener listener) {
+        this.asyncListener = listener;
+    }
+
+    @Override
+    public void onResult(String response) {
+        Toast.makeText(StartActivity.this, response, Toast.LENGTH_SHORT).show();
+        loginSubmitButton.setEnabled(true);
+        if (response != null) {
+            try {
+                jsonResponse = new JSONObject(response);
+                if (jsonResponse.getInt("code") == 0) {
+                    //TODO: Save Login and Password in SharedPreferences here
+                    Toast.makeText(StartActivity.this, "Welcome, " + userLoginName.getText().toString(), Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(StartActivity.this, AvailableRaidsActivity.class));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onError(Exception e) {
+        Toast.makeText(StartActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        loginSubmitButton.setEnabled(true);
     }
 }

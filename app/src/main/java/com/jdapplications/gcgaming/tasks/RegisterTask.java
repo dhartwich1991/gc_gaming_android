@@ -28,6 +28,7 @@ import java.util.List;
 
 public class RegisterTask extends AsyncTask<String, String, String> {
     private OnAsyncResultListener listener;
+    Exception error = null;
 
     public RegisterTask(OnAsyncResultListener listener) {
         this.listener = listener;
@@ -59,18 +60,25 @@ public class RegisterTask extends AsyncTask<String, String, String> {
             }
         } catch (ClientProtocolException e1) {
             e1.printStackTrace();
+            error = e1;
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
+            error = e1;
         } catch (IOException e1) {
             e1.printStackTrace();
+            error = e1;
         }
         return responseString;
     }
 
     @Override
     protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        listener.onResult(s);
+        if (error == null) {
+            super.onPostExecute(s);
+            listener.onResult(s);
+        } else {
+            listener.onError(error);
+        }
     }
 }
 

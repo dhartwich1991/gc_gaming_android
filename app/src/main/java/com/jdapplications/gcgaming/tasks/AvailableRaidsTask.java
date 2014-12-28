@@ -1,7 +1,9 @@
 package com.jdapplications.gcgaming.tasks;
 
 import android.os.AsyncTask;
+import android.widget.Toast;
 
+import com.jdapplications.gcgaming.activities.AvailableRaidsActivity;
 import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
 
 import org.apache.http.HttpResponse;
@@ -21,6 +23,8 @@ import java.io.UnsupportedEncodingException;
  */
 public class AvailableRaidsTask extends AsyncTask<String, String, String> {
     private OnAsyncResultListener listener;
+
+    Exception error = null;
 
     public AvailableRaidsTask(OnAsyncResultListener listener) {
         this.listener = listener;
@@ -48,17 +52,26 @@ public class AvailableRaidsTask extends AsyncTask<String, String, String> {
             }
         } catch (ClientProtocolException e1) {
             e1.printStackTrace();
+            error = e1;
         } catch (UnsupportedEncodingException e1) {
             e1.printStackTrace();
+            error = e1;
         } catch (IOException e1) {
             e1.printStackTrace();
+            error = e1;
         }
         return responseString;
     }
 
     @Override
     protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        listener.onResult(s);
+        if (error == null) {
+            super.onPostExecute(s);
+            listener.onResult(s);
+        }
+        else {
+            listener.onError(error);
+        }
     }
+
 }
