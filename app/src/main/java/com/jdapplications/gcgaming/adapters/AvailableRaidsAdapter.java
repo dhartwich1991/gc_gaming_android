@@ -18,9 +18,13 @@ public class AvailableRaidsAdapter extends RecyclerView.Adapter<AvailableRaidsAd
 
     private ArrayList<Raid> availableRaids;
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    OnItemClickListener mItemClickListener;
+
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         // each data item is just a string in this case
         public TextView raidTitle, raidDescription, raidStart, raidEnd, raidLeads;
+
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
@@ -29,7 +33,25 @@ public class AvailableRaidsAdapter extends RecyclerView.Adapter<AvailableRaidsAd
             raidStart = (TextView) itemLayoutView.findViewById(R.id.raid_start);
             raidEnd = (TextView) itemLayoutView.findViewById(R.id.raid_end);
             raidLeads = (TextView) itemLayoutView.findViewById(R.id.raid_leaders);
+            itemLayoutView.setOnClickListener(this);
+
         }
+
+        @Override
+        public void onClick(View v) {
+            if (mItemClickListener != null) {
+                mItemClickListener.onItemClick(v, getPosition());
+            }
+        }
+
+    }
+
+    public interface OnItemClickListener {
+        public void onItemClick(View view, int position);
+    }
+
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
     }
 
     public AvailableRaidsAdapter(ArrayList<Raid> availableRaids) {

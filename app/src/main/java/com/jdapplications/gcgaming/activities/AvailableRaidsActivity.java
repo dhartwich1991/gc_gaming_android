@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jdapplications.gcgaming.R;
 import com.jdapplications.gcgaming.adapters.AvailableRaidsAdapter;
@@ -54,7 +55,7 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
             public void onResult(String response) {
                 try {
                     availableRaidsArray = new JSONArray(response);
-                    for(int i = 0; i<availableRaidsArray.length(); i++){
+                    for (int i = 0; i < availableRaidsArray.length(); i++) {
                         JSONObject tempAvailableRaid = availableRaidsArray.getJSONObject(i);
                         String title = tempAvailableRaid.getString("name");
                         String description = tempAvailableRaid.getString("description");
@@ -66,6 +67,12 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
                     }
                     // specify an adapter (see also next example)
                     mAdapter = new AvailableRaidsAdapter(availableRaids);
+                    mAdapter.setOnItemClickListener(new AvailableRaidsAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Toast.makeText(AvailableRaidsActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                     availableRaidsView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
