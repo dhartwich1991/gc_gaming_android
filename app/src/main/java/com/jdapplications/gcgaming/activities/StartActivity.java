@@ -47,6 +47,7 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
                 try {
                     jsonResponse = new JSONObject(response);
                     if(jsonResponse.getInt("code") == 0){
+                        //TODO: Save Login and Password in SharedPreferences here
                         Toast.makeText(StartActivity.this, "Welcome, "+userLoginName.getText().toString(), Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(StartActivity.this, AvailableRaidsActivity.class));
                     }
