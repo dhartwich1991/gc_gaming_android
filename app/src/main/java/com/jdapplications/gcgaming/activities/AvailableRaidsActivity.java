@@ -47,7 +47,6 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
         availableRaidsView.setLayoutManager(mLayoutManager);
         availableRaids = new ArrayList<>();
 
-
         availableRaidsView.setItemAnimator(new DefaultItemAnimator());
 
         new AvailableRaidsTask(new OnAsyncResultListener() {
@@ -100,6 +99,9 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+        else if(id == R.id.action_logout){
+            //TODO: Log user out and remove Data from Shared Prefs
         }
 
         return super.onOptionsItemSelected(item);
