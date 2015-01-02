@@ -44,13 +44,13 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
         userLoginName = (EditText) findViewById(R.id.userLoginName);
         userLoginPassword = (EditText) findViewById(R.id.userLoginPassword);
         setOnAsyncResultListener(this);
-        sharedPref = StartActivity.this.getPreferences(Context.MODE_PRIVATE);
+        sharedPref = getApplicationContext().getSharedPreferences("com.jdapplications.gcgaming", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
-        if(sharedPref.getString("access_token", null) != null){
+        if (sharedPref.getString("access_token", null) != null) {
             Log.d("DEBUG", "sharedPreferences have a token");
             task = new LoginTask(asyncListener);
-            task.execute(sharedPref.getString("username", null), sharedPref.getString("password",null));
+            task.execute(sharedPref.getString("username", null), sharedPref.getString("password", null));
             loginSubmitButton.setEnabled(false);
         }
         Log.d("DEBUG", "sharedPreferences do not have a token");
@@ -98,19 +98,26 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
     @Override
     public void onResult(String response) {
         Toast.makeText(StartActivity.this, response, Toast.LENGTH_SHORT).show();
+        Log.d("LoginResponse", response);
         loginSubmitButton.setEnabled(true);
         if (response != null) {
             try {
                 jsonResponse = new JSONObject(response);
                 if (jsonResponse.getInt("code") == 0) {
                     //TODO: Save Login and Password in SharedPreferences here
-                    if(sharedPref.getString("access_token", null) == null) {
-                        editor.putString("username", userLoginName.getText().toString());
+                    JSONObject loginUser = jsonResponse.optJSONObject("user");
+                    editor.putBoolean("admin", loginUser.optBoolean("admin", false));
+                    editor.putBoolean("moderator", loginUser.optBoolean("moderator", false));
+                    editor.commit();
+                    if (sharedPref.getString("access_token", null) == null) {
+                        editor.putInt("id", loginUser.getInt("id"));
+                        editor.putString("username", loginUser.getString("username"));
                         editor.putString("password", userLoginPassword.getText().toString());
-                        editor.putString("access_token", jsonResponse.getString("access_token"));
+                        editor.putString("access_token", loginUser.getString("access_token"));
+                        editor.putString("email", loginUser.getString("email"));
                         editor.commit();
                     }
-                    Toast.makeText(StartActivity.this, "Welcome, " + sharedPref.getString("username", ""), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(StartActivity.this, "Welcome, " + loginUser.getString("username"), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(StartActivity.this, AvailableRaidsActivity.class));
                 }
             } catch (JSONException e) {

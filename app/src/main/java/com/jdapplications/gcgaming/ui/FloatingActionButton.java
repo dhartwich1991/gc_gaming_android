@@ -4,8 +4,10 @@ package com.jdapplications.gcgaming.ui;
  * Created by danielhartwich on 1/2/15.
  */
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Outline;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewOutlineProvider;
@@ -77,7 +79,6 @@ public class FloatingActionButton extends FrameLayout implements Checkable {
 
     /**
      * Sets the checked/unchecked state of the FAB.
-     *
      * @param checked
      */
     public void setChecked(boolean checked) {

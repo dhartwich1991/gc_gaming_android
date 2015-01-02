@@ -1,10 +1,13 @@
 package com.jdapplications.gcgaming.activities;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +21,7 @@ import com.jdapplications.gcgaming.adapters.AvailableRaidsAdapter;
 import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
 import com.jdapplications.gcgaming.models.Raid;
 import com.jdapplications.gcgaming.tasks.AvailableRaidsTask;
+import com.jdapplications.gcgaming.ui.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +36,9 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
     private RecyclerView.LayoutManager mLayoutManager;
     private AvailableRaidsAdapter mAdapter;
     private ArrayList<Raid> availableRaids;
-    JSONArray availableRaidsArray;
+    private JSONArray availableRaidsArray;
+    private SharedPreferences prefs;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +52,14 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
         mLayoutManager = new LinearLayoutManager(this);
         availableRaidsView.setLayoutManager(mLayoutManager);
         availableRaids = new ArrayList<>();
+
+        prefs = getApplicationContext().getSharedPreferences("com.jdapplications.gcgaming", Context.MODE_PRIVATE);
+
+        fab = (FloatingActionButton) findViewById(R.id.fab_add_event);
+        
+        if(!prefs.getBoolean("moderator", false)){
+            fab.setVisibility(View.GONE);
+        }
 
         availableRaidsView.setItemAnimator(new DefaultItemAnimator());
 
