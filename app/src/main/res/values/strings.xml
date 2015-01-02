@@ -5,6 +5,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_start">Login</string>
-    <string name="title_activity_available_raids">AvailableRaids</string>
+    <string name="title_activity_available_raids">Raids</string>
+    <string name="title_activity_create_event">Create Event</string>
 
 </resources>

@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.jdapplications.gcgaming.R;
 import com.jdapplications.gcgaming.models.Raid;
+import com.jdapplications.gcgaming.utils.DateFormatter;
 
 import java.util.ArrayList;
 
@@ -72,8 +73,9 @@ public class AvailableRaidsAdapter extends RecyclerView.Adapter<AvailableRaidsAd
         Raid tempRaid = availableRaids.get(i);
         viewHolder.raidTitle.setText(tempRaid.name);
         viewHolder.raidDescription.setText(tempRaid.description);
-        viewHolder.raidStart.setText(tempRaid.startsAt);
-        viewHolder.raidEnd.setText(tempRaid.endsAt);
+
+        viewHolder.raidStart.setText(DateFormatter.formatJSONISO8601Date(tempRaid.startsAt));
+        viewHolder.raidEnd.setText(DateFormatter.formatJSONISO8601Date(tempRaid.endsAt));
         viewHolder.raidLeads.setText(tempRaid.leader);
     }
 

@@ -48,12 +48,10 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
         editor = sharedPref.edit();
 
         if (sharedPref.getString("access_token", null) != null) {
-            Log.d("DEBUG", "sharedPreferences have a token");
             task = new LoginTask(asyncListener);
             task.execute(sharedPref.getString("username", null), sharedPref.getString("password", null));
             loginSubmitButton.setEnabled(false);
         }
-        Log.d("DEBUG", "sharedPreferences do not have a token");
 
     }
 
@@ -97,14 +95,11 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
 
     @Override
     public void onResult(String response) {
-        Toast.makeText(StartActivity.this, response, Toast.LENGTH_SHORT).show();
-        Log.d("LoginResponse", response);
         loginSubmitButton.setEnabled(true);
         if (response != null) {
             try {
                 jsonResponse = new JSONObject(response);
                 if (jsonResponse.getInt("code") == 0) {
-                    //TODO: Save Login and Password in SharedPreferences here
                     JSONObject loginUser = jsonResponse.optJSONObject("user");
                     editor.putBoolean("admin", loginUser.optBoolean("admin", false));
                     editor.putBoolean("moderator", loginUser.optBoolean("moderator", false));

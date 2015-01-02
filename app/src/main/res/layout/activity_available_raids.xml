@@ -1,13 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.jdapplications.gcgaming.activities.AvailableRaidsActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/availableRaidsView"
-        android:scrollbars="vertical"
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:id="@+id/swipeRefresh">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/availableRaidsView"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <com.jdapplications.gcgaming.ui.FloatingActionButton
         android:id="@+id/fab_add_event"
@@ -19,13 +27,14 @@
         android:layout_margin="16dp"
         android:background="@drawable/fab_background"
         android:stateListAnimator="@animator/fab_anim">
+
         <ImageView
             android:layout_width="@dimen/fab_icon_size"
             android:layout_height="@dimen/fab_icon_size"
             android:src="@drawable/ic_add"
             android:tint="@color/text_color"
             android:layout_gravity="center"
-            android:duplicateParentState="true"/>
+            android:duplicateParentState="true" />
 
-        </com.jdapplications.gcgaming.ui.FloatingActionButton>
+    </com.jdapplications.gcgaming.ui.FloatingActionButton>
 </RelativeLayout>

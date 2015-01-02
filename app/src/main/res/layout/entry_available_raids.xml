@@ -23,13 +23,16 @@
                 android:id="@+id/raid_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
                 android:text="Raid Title" />
 
             <TextView
                 android:id="@+id/raid_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Raid Description" />
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="Raid DescriptionRaid DescRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid DescriptioriptioRaid DescriptioRaid DescriptioRaid DescriptioRaid Descriptio Raid Descriptio" />
 
             <TextView
                 android:id="@+id/raid_start"
