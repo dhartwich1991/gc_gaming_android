@@ -4,13 +4,8 @@ package com.jdapplications.gcgaming.ui;
  * Created by danielhartwich on 1/2/15.
  */
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Outline;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.widget.Checkable;
 import android.widget.FrameLayout;
 

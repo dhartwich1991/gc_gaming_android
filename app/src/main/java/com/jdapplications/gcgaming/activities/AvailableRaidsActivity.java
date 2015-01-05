@@ -133,13 +133,14 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
                     availableRaidsArray = new JSONArray(response);
                     for (int i = 0; i < availableRaidsArray.length(); i++) {
                         JSONObject tempAvailableRaid = availableRaidsArray.getJSONObject(i);
+                        int id = tempAvailableRaid.getInt("id");
                         String title = tempAvailableRaid.getString("name");
                         String description = tempAvailableRaid.getString("description");
                         String raidlead = tempAvailableRaid.getString("raidlead");
                         String startsAt = tempAvailableRaid.getString("startdate");
                         String endsAt = tempAvailableRaid.getString("enddate");
 
-                        availableRaids.add(new Raid(title, description, raidlead, startsAt, endsAt));
+                        availableRaids.add(new Raid(id, title, description, raidlead, startsAt, endsAt));
                     }
                     // specify an adapter (see also next example)
                     mAdapter = new AvailableRaidsAdapter(availableRaids);
@@ -147,6 +148,8 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
                         @Override
                         public void onItemClick(View view, int position) {
                             Toast.makeText(AvailableRaidsActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AvailableRaidsActivity.this, RaidsDetailActivity.class)
+                                    .putExtra("raid_id", String.valueOf(availableRaids.get(position).id)));
                         }
                     });
                     availableRaidsView.setAdapter(mAdapter);

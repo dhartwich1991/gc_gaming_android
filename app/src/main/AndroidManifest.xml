@@ -28,6 +28,14 @@
             android:name=".activities.CreateEventActivity"
             android:label="@string/title_activity_create_event" >
         </activity>
+        <activity
+            android:name=".activities.RaidsDetailActivity"
+            android:label="@string/title_activity_raids_detail"
+            android:parentActivityName=".activities.AvailableRaidsActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.jdapplications.gcgaming.activities.AvailableRaidsActivity" />
+        </activity>
     </application>
 
 </manifest>

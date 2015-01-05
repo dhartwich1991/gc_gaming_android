@@ -8,4 +8,8 @@
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
     <color name="divider_color">#B6B6B6</color>
+
+    <color name="confirmed_green">#259b24</color>
+    <color name="pending_yellow">#ffeb3b</color>
+    <color name="declined_red">#e51c23</color>
 </resources>

@@ -1,0 +1,132 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.jdapplications.gcgaming.activities.RaidsDetailActivity">
+
+        <ImageView
+            android:id="@+id/banner_image"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:src="@drawable/draenor_banner"
+            android:scaleType="fitXY"
+            android:layout_alignParentTop="true"
+            android:adjustViewBounds="true"
+            android:cropToPadding="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/banner_image"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:id="@+id/relativeLayout">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Raid Title"
+                android:id="@+id/raid_name"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Raid description text"
+                android:id="@+id/raid_description"
+                android:layout_below="@+id/raid_name"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Raid Leader"
+                android:id="@+id/raid_lead"
+                android:layout_below="@+id/raid_description"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Start of Raid"
+                android:id="@+id/raid_start"
+                android:layout_below="@+id/raid_lead"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Raid End"
+                android:id="@+id/raid_end"
+                android:layout_below="@+id/raid_start"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true" />
+
+            <View
+                android:id="@+id/seperator"
+                android:layout_below="@id/raid_end"
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/divider_color"/>
+
+            <TextView
+                android:id="@+id/member_list_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:textStyle="bold"
+                android:layout_below="@id/seperator"
+                android:text="Memberlist"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/raid_members"
+                android:layout_below="@id/member_list_header"
+                android:scrollbars="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="200dp" />
+
+        </RelativeLayout>
+
+
+
+        <com.jdapplications.gcgaming.ui.FloatingActionButton
+            android:id="@+id/fab_sign_up"
+            android:layout_width="@dimen/fab_size"
+            android:layout_height="@dimen/fab_size"
+            android:background="@drawable/fab_background_checkable"
+            android:stateListAnimator="@animator/fab_anim"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="90dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/activity_horizontal_margin"
+            android:layout_alignParentEnd="true">
+
+            <ImageView
+                android:layout_width="@dimen/fab_icon_size"
+                android:layout_height="@dimen/fab_icon_size"
+                android:src="@drawable/fab_sign_raid_icons"
+                android:layout_gravity="center"
+                android:duplicateParentState="true" />
+
+        </com.jdapplications.gcgaming.ui.FloatingActionButton>
+
+    </RelativeLayout>
+</ScrollView>

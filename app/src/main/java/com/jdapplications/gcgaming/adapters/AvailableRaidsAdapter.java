@@ -74,8 +74,8 @@ public class AvailableRaidsAdapter extends RecyclerView.Adapter<AvailableRaidsAd
         viewHolder.raidTitle.setText(tempRaid.name);
         viewHolder.raidDescription.setText(tempRaid.description);
 
-        viewHolder.raidStart.setText(DateFormatter.formatJSONISO8601Date(tempRaid.startsAt));
-        viewHolder.raidEnd.setText(DateFormatter.formatJSONISO8601Date(tempRaid.endsAt));
+        viewHolder.raidStart.setText("Start: " + DateFormatter.formatJSONISO8601Date(tempRaid.startsAt));
+        viewHolder.raidEnd.setText("Ende: " + DateFormatter.formatJSONISO8601Date(tempRaid.endsAt));
         viewHolder.raidLeads.setText(tempRaid.leader);
     }
 

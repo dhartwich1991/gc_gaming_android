@@ -88,6 +88,6 @@ public class CreateEventActivity extends ActionBarActivity implements View.OnCli
 
     @Override
     public void onError(Exception e) {
-        Toast.makeText(CreateEventActivity.this, "Event was not created " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(CreateEventActivity.this, "Event couldn't be created " + e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }
