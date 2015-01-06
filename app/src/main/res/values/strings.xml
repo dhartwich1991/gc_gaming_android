@@ -8,5 +8,9 @@
     <string name="title_activity_available_raids">Raids</string>
     <string name="title_activity_create_event">Create Event</string>
     <string name="title_activity_raids_detail">RaidsDetailActivity</string>
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+    <string name="title_activity_character">Character</string>
+    <string name="title_activity_profile">Profile</string>
 
 </resources>

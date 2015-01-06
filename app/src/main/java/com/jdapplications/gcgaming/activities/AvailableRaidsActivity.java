@@ -3,9 +3,11 @@ package com.jdapplications.gcgaming.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.jdapplications.gcgaming.R;
@@ -41,11 +45,46 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
     private FloatingActionButton fab;
     private SwipeRefreshLayout swipeRefreshLayout;
 
+    private String[] mMenuItems;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private ListView mDrawerList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_available_raids);
+
+        mMenuItems = new String[]{"Raids", "Character", "Profile"};
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mMenuItems));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this,                  /* host Activity */
+                mDrawerLayout,         /* DrawerLayout object */
+                R.string.drawer_open,  /* "open drawer" description */
+                R.string.drawer_close  /* "close drawer" description */
+        ) {
+            /** Called when a drawer has settled in a completely closed state. */
+            public void onDrawerClosed(View view) {
+                super.onDrawerClosed(view);
+                getSupportActionBar().setTitle(getTitle());
+            }
+
+            /** Called when a drawer has settled in a completely open state. */
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                getSupportActionBar().setTitle(R.string.app_name);
+            }
+        };
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
 
         availableRaidsView = (RecyclerView) findViewById(R.id.availableRaidsView);
         availableRaidsView.setOnClickListener(this);
@@ -92,6 +131,9 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
             return true;
         } else if (id == R.id.action_logout) {
             //TODO: Log user out and remove Data from Shared Prefs
+        } else if (id == android.R.id.home) {
+            mDrawerToggle.onOptionsItemSelected(item);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -163,5 +205,37 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
                 Toast.makeText(AvailableRaidsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }).execute();
+    }
+
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            selectItem(position);
+        }
+    }
+
+    /**
+     * Swaps fragments in the main content view
+     */
+    private void selectItem(int position) {
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerList.setItemChecked(position, true);
+        setTitle(mMenuItems[position]);
+        mDrawerLayout.closeDrawer(mDrawerList);
+        mDrawerLayout.closeDrawers();
+
+        switch (position) {
+            case 0:
+                //Do nothing we are already in that activity
+                return;
+            case 1:
+                Intent i = new Intent(AvailableRaidsActivity.this, CharacterActivity.class);
+                startActivity(i);
+                return;
+            case 2:
+                Intent j = new Intent(AvailableRaidsActivity.this, ProfileActivity.class);
+                startActivity(j);
+                return;
+        }
     }
 }
