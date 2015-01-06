@@ -35,6 +35,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
+            android:hint="Example: Example Title"
             android:layout_alignParentEnd="true" />
 
         <com.jdapplications.gcgaming.ui.FloatingActionButton
@@ -66,6 +67,7 @@
             android:id="@+id/new_event_desc_desc"
             android:layout_below="@+id/new_event_title"
             android:layout_alignParentLeft="true"
+
             android:layout_alignParentStart="true" />
 
         <EditText
@@ -77,6 +79,7 @@
             android:layout_below="@+id/new_event_desc_desc"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:hint="Example: Short description to tell the people what this event is about. Please keep it simple and short."
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
@@ -98,6 +101,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
+            android:hint="Example: Dreendor, Pace"
             android:layout_alignParentEnd="true" />
 
         <TextView
@@ -118,6 +122,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
+            android:hint="Example: 17.01.2015 14:30"
             android:layout_alignParentEnd="true" />
 
         <TextView
@@ -128,6 +133,7 @@
             android:layout_below="@+id/new_event_start"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+
             android:layout_marginTop="16dp" />
 
         <EditText
@@ -138,6 +144,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
+            android:hint="Example: 17.01.2015 19:30"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>

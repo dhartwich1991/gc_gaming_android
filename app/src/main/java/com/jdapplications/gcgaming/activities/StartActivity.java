@@ -101,11 +101,11 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
                 jsonResponse = new JSONObject(response);
                 if (jsonResponse.getInt("code") == 0) {
                     JSONObject loginUser = jsonResponse.optJSONObject("user");
+                    editor.putInt("id", loginUser.getInt("id"));
                     editor.putBoolean("admin", loginUser.optBoolean("admin", false));
                     editor.putBoolean("moderator", loginUser.optBoolean("moderator", false));
                     editor.commit();
                     if (sharedPref.getString("access_token", null) == null) {
-                        editor.putInt("id", loginUser.getInt("id"));
                         editor.putString("username", loginUser.getString("username"));
                         editor.putString("password", userLoginPassword.getText().toString());
                         editor.putString("access_token", loginUser.getString("access_token"));

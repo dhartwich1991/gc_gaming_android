@@ -13,6 +13,9 @@ import com.jdapplications.gcgaming.R;
 import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
 import com.jdapplications.gcgaming.tasks.RegisterTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class RegisterActivity extends ActionBarActivity implements View.OnClickListener, OnAsyncResultListener {
     private EditText usernameField, passwordField;
     private Button submitButton;
@@ -65,7 +68,15 @@ public class RegisterActivity extends ActionBarActivity implements View.OnClickL
 
     @Override
     public void onResult(String response) {
-        Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_LONG).show();
+        try {
+            JSONObject json = new JSONObject(response);
+            Toast.makeText(RegisterActivity.this, json.getString("message"), Toast.LENGTH_LONG).show();
+            if(json.getInt("code") == 0){
+                finish();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         submitButton.setEnabled(true);
     }
 

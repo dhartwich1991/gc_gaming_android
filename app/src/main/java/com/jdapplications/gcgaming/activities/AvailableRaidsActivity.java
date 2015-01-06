@@ -147,7 +147,6 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
                     mAdapter.setOnItemClickListener(new AvailableRaidsAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Toast.makeText(AvailableRaidsActivity.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(AvailableRaidsActivity.this, RaidsDetailActivity.class)
                                     .putExtra("raid_id", String.valueOf(availableRaids.get(position).id)));
                         }

@@ -75,6 +75,7 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
         isSignedUp(raidId, String.valueOf(sharedPref.getInt("id", 0)));
 
         loadRaidDetails(raidId);
+        Log.d("RaidID", raidId);
     }
 
 
@@ -139,6 +140,7 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
                     Toast.makeText(RaidsDetailActivity.this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
                     if (jsonResponse.getInt("code") == 0) {
                         loadRaidDetails(raidId);
+                        isSignedUp(raidId, String.valueOf(sharedPref.getInt("id", 0)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -161,6 +163,7 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
                     Toast.makeText(RaidsDetailActivity.this, jsonResponse.getString("message"), Toast.LENGTH_SHORT).show();
                     if (jsonResponse.getInt("code") == 0) {
                         loadRaidDetails(raidId);
+                        isSignedUp(raidId, String.valueOf(sharedPref.getInt("id", 0)));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
