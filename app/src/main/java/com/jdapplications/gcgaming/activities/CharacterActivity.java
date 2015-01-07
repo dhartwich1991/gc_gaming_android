@@ -138,6 +138,12 @@ public class CharacterActivity extends ActionBarActivity implements View.OnClick
                         }).execute();
                         int level = jsonChar.getInt("level");
                         charLevelTv.setText(String.valueOf(level));
+
+                        JSONObject items = jsonChar.getJSONObject("items");
+                        int itemlvlEquipped = items.getInt("averageItemLevelEquipped");
+                        int itemlvlTotal = items.getInt("averageItemLevel");
+
+
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

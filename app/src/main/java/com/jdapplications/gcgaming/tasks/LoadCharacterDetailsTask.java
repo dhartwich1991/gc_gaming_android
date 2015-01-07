@@ -35,7 +35,7 @@ public class LoadCharacterDetailsTask extends AsyncTask<String, String, String> 
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse httpResponse;
-            HttpGet getRequest = new HttpGet("http://eu.battle.net/api/wow/character/"+params[0]+"/"+params[1]);
+            HttpGet getRequest = new HttpGet("http://eu.battle.net/api/wow/character/"+params[0]+"/"+params[1]+"?fields=items");
 
             httpResponse = httpClient.execute(getRequest);
             StatusLine statusLine = httpResponse.getStatusLine();
