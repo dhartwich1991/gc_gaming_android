@@ -44,6 +44,10 @@
             android:name=".activities.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
+        <activity
+            android:name=".activities.AddCharacterActivity"
+            android:label="@string/title_activity_add_character" >
+        </activity>
     </application>
 
 </manifest>

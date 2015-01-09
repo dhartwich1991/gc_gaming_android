@@ -10,7 +10,8 @@
     <string name="title_activity_raids_detail">RaidsDetailActivity</string>
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
-    <string name="title_activity_character">Character</string>
+    <string name="title_activity_character">Your characters</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_add_character">Add new character</string>
 
 </resources>

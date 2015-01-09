@@ -16,10 +16,18 @@ public class User {
         this.username = username;
     }
 
+    public User(int id, String username, Character character) {
+        this.id = id;
+        this.username = username;
+        this.character = character;
+    }
+
     public int id;
     public String username;
     public String password;
     public String email;
     public String accessToken;
+
+    public Character character;
     //TODO: Add character to a user
 }

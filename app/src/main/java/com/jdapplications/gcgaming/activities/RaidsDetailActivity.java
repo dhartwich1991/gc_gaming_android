@@ -1,6 +1,8 @@
 package com.jdapplications.gcgaming.activities;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -8,19 +10,26 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jdapplications.gcgaming.R;
+import com.jdapplications.gcgaming.adapters.CharacterListAdapter;
 import com.jdapplications.gcgaming.adapters.RaidMemberListAdapter;
 import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
-import com.jdapplications.gcgaming.models.User;
+import com.jdapplications.gcgaming.models.*;
+import com.jdapplications.gcgaming.models.Character;
 import com.jdapplications.gcgaming.tasks.IsSignedUpTask;
+import com.jdapplications.gcgaming.tasks.MyCharactersTask;
 import com.jdapplications.gcgaming.tasks.RaidDetailTask;
 import com.jdapplications.gcgaming.tasks.SignOffForRaidTask;
 import com.jdapplications.gcgaming.tasks.SignUpForRaidTask;
+import com.jdapplications.gcgaming.ui.DividerItemDecoration;
 import com.jdapplications.gcgaming.ui.FloatingActionButton;
 import com.jdapplications.gcgaming.utils.DateFormatter;
 
@@ -43,6 +52,7 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
     private SharedPreferences sharedPref;
     private String raidId;
 
+    public ArrayList<Character> chars;
     private boolean isSignedUp;
 
     private FloatingActionButton fab;
@@ -65,10 +75,13 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
         raidMembers = (RecyclerView) findViewById(R.id.raid_members);
         raidMembers.setLayoutManager(mLayoutManager);
         raidMembers.setItemAnimator(new DefaultItemAnimator());
+        raidMembers.addItemDecoration(new DividerItemDecoration(RaidsDetailActivity.this, null));
 
         fab = (FloatingActionButton) findViewById(R.id.fab_sign_up);
         fab.setOnCheckedChangeListener(this);
         sharedPref = getApplicationContext().getSharedPreferences("com.jdapplications.gcgaming", Context.MODE_PRIVATE);
+
+        chars = new ArrayList<>();
 
         setOnAsyncResultListener(this);
 
@@ -131,7 +144,7 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
         }).execute(raidId, userId);
     }
 
-    private void signUpForRaid(final String raidId, String userId) {
+    private void signUpForRaid(final String raidId, String userId, String characterId, String role) {
         new SignUpForRaidTask(new OnAsyncResultListener() {
             @Override
             public void onResult(String response) {
@@ -151,7 +164,7 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
             public void onError(Exception e) {
                 Toast.makeText(RaidsDetailActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
             }
-        }).execute(raidId, userId);
+        }).execute(raidId, userId, characterId, role);
     }
 
     private void signOffForRaid(final String raidId, String userId) {
@@ -191,10 +204,10 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
 
             raidTitle.setText(name);
             getSupportActionBar().setTitle(name);
-            raidDescription.setText("Description: "+description);
-            raidLead.setText("Raidlead: "+raidlead);
-            raidStart.setText("Start: "+DateFormatter.formatJSONISO8601Date(start));
-            raidEnd.setText("End: "+DateFormatter.formatJSONISO8601Date(end));
+            raidDescription.setText("Description: " + description);
+            raidLead.setText("Raidlead: " + raidlead);
+            raidStart.setText("Start: " + DateFormatter.formatJSONISO8601Date(start));
+            raidEnd.setText("End: " + DateFormatter.formatJSONISO8601Date(end));
 
             //Load Raid Members
             raidMembersList = new ArrayList<>();
@@ -202,11 +215,24 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
             for (int i = 0; i < members.length(); i++) {
                 JSONObject tempMember = members.getJSONObject(i);
                 int id = tempMember.getInt("id");
+                int charid = tempMember.getInt("charid");
                 String username = tempMember.getString("username");
-                raidMembersList.add(new User(id, username));
+                String character = tempMember.getString("charname");
+                String realm = tempMember.getString("realm");
+                String role = tempMember.getString("role");
+                int race = tempMember.getInt("race");
+                int characterClass = tempMember.getInt("character_class");
+                String thumbnailurl = tempMember.getString("thumbnail");
+                int level = tempMember.getInt("level");
+                int itemlvlequipped = tempMember.getInt("itemlvlequipped");
+                int itemlvltotal = tempMember.getInt("itemlvltotal");
+                raidMembersList.add(new User(id, username,
+                        new Character(charid, character, realm, race, characterClass,
+                                thumbnailurl, level, itemlvlequipped, itemlvltotal, role)));
                 //Do stuff with member
+
             }
-            RaidMemberListAdapter adapter = new RaidMemberListAdapter(raidMembersList);
+            RaidMemberListAdapter adapter = new RaidMemberListAdapter(raidMembersList, RaidsDetailActivity.this);
             raidMembers.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
@@ -230,14 +256,135 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
         if (isChecked) {
             Log.d("Check changed", "true");
             if (!isSignedUp) {
-                signUpForRaid(raidId, String.valueOf(sharedPref.getInt("id", 0)));
+                chars = new ArrayList<>();
+                loadCharactersAndShowDialog();
             }
         } else {
             Log.d("Check changed", "false");
-            if(isSignedUp) {
+            if (isSignedUp) {
                 signOffForRaid(raidId, String.valueOf(sharedPref.getInt("id", 0)));
             }
         }
+    }
 
+    private void loadCharactersAndShowDialog() {
+        new MyCharactersTask(new OnAsyncResultListener() {
+            @Override
+            public void onResult(String response) {
+                try {
+                    JSONObject jsonChars = new JSONObject(response);
+                    JSONArray myCharacters = jsonChars.getJSONArray("characters");
+                    for (int i = 0; i < myCharacters.length(); i++) {
+                        JSONObject tempChar = myCharacters.getJSONObject(i);
+                        int id = tempChar.getInt("id");
+                        int lastModified = tempChar.getInt("lastModified");
+                        String realm = tempChar.getString("realm");
+                        String battleGroup = tempChar.getString("battlegroup");
+                        int achievementPoints = tempChar.getInt("achievementPoints");
+                        int gender = tempChar.getInt("gender");
+                        String charName = tempChar.getString("name");
+                        String thumbnail = tempChar.getString("thumbnailurl");
+
+                        int charClass = tempChar.getInt("character_class");
+                        int race = tempChar.getInt("race");
+                        int level = tempChar.getInt("level");
+                        int itemlvlequipped = tempChar.getInt("itemlevelequipped");
+                        int itemlvltotal = tempChar.getInt("itemleveltotal");
+                        int userid = tempChar.getInt("user_id");
+
+                        Character myChar = new Character(id, lastModified, charName, realm,
+                                battleGroup, charClass, race, gender, level,
+                                achievementPoints, thumbnail, itemlvltotal,
+                                itemlvlequipped, userid);
+                        chars.add(myChar);
+                    }
+
+                    final AlertDialog alertDialog = new myCustomAlertDialog(RaidsDetailActivity.this, chars);
+                    alertDialog.show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        }).execute(String.valueOf(sharedPref.getInt("id", 0)));
+
+
+    }
+
+    public class myCustomAlertDialog extends AlertDialog {
+
+        protected myCustomAlertDialog(Context context, ArrayList<Character> chars) {
+            super(context);
+
+            LayoutInflater inflater = getLayoutInflater();
+            View convertView = inflater.inflate(R.layout.dialog_select_character, null);
+            setView(convertView);
+            setTitle("List");
+            RecyclerView rv = (RecyclerView) convertView.findViewById(R.id.dialog_character_list);
+            RecyclerView.LayoutManager dialogLayoutManager = new LinearLayoutManager(context);
+            rv.setLayoutManager(dialogLayoutManager);
+            rv.setItemAnimator(new DefaultItemAnimator());
+            rv.addItemDecoration(new DividerItemDecoration(context, null));
+            CharacterListAdapter dialogAdapter = new CharacterListAdapter(chars, context);
+            final ArrayList<Character> charas = chars;
+            dialogAdapter.setOnItemClickListener(new CharacterListAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position) {
+                    //Select Character and store in db
+                    //dismiss dialog afterwards
+                    //Sign up for the raid
+                    showRoleDialog(raidId, String.valueOf(sharedPref.getInt("id", 0)), String.valueOf(charas.get(position).id));
+                    dismiss();
+                    fab.setChecked(false);
+                }
+            });
+            rv.setAdapter(dialogAdapter);
+            setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel", new OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dismiss();
+                    fab.setChecked(false);
+                }
+            });
+
+        }
+
+        private void showRoleDialog(final String raidId, final String userId, final String characterId) {
+            AlertDialog.Builder builderSingle = new AlertDialog.Builder(
+                    RaidsDetailActivity.this);
+            builderSingle.setTitle("Select your Role");
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(
+                    RaidsDetailActivity.this,
+                    android.R.layout.select_dialog_singlechoice);
+            arrayAdapter.add("Tank");
+            arrayAdapter.add("Heal");
+            arrayAdapter.add("Damage");
+            builderSingle.setNegativeButton("Cancel",
+                    new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            fab.setChecked(false);
+                        }
+                    });
+
+            builderSingle.setAdapter(arrayAdapter,
+                    new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String role = arrayAdapter.getItem(which);
+                            Log.d("Role", role);
+                            signUpForRaid(raidId, userId, characterId, role);
+                        }
+                    });
+            builderSingle.show();
+        }
     }
 }

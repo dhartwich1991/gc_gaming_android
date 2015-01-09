@@ -1,38 +1,47 @@
 package com.jdapplications.gcgaming.activities;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jdapplications.gcgaming.R;
+import com.jdapplications.gcgaming.adapters.CharacterListAdapter;
 import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
+import com.jdapplications.gcgaming.models.Character;
 import com.jdapplications.gcgaming.tasks.BlizzClassTask;
 import com.jdapplications.gcgaming.tasks.BlizzRaceTask;
 import com.jdapplications.gcgaming.tasks.LoadCharacterDetailsTask;
+import com.jdapplications.gcgaming.tasks.MyCharactersTask;
+import com.jdapplications.gcgaming.tasks.UpdateCharacterTask;
+import com.jdapplications.gcgaming.ui.DividerItemDecoration;
+import com.jdapplications.gcgaming.ui.FloatingActionButton;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class CharacterActivity extends ActionBarActivity implements View.OnClickListener {
 
-    private Button submitButton;
-    private EditText charServer;
-    private EditText charName;
-    private ImageView charAvatar;
-    private TextView charNameTv;
-    private TextView charClassTv;
-    private TextView charRaceTv;
-    private TextView charLevelTv;
+    private FloatingActionButton fab;
+    private RecyclerView yourCharacters;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private SharedPreferences prefs;
+    private CharacterListAdapter mAdapter;
+
+    private ArrayList<Character> myChars;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,17 +50,22 @@ public class CharacterActivity extends ActionBarActivity implements View.OnClick
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        submitButton = (Button) findViewById(R.id.button_load_char);
-        submitButton.setOnClickListener(this);
+        prefs = getApplicationContext().getSharedPreferences("com.jdapplications.gcgaming", Context.MODE_PRIVATE);
 
-        charServer = (EditText) findViewById(R.id.character_server);
-        charName = (EditText) findViewById(R.id.character_name);
+        fab = (FloatingActionButton) findViewById(R.id.fab_add_character);
+        fab.setOnClickListener(this);
 
-        charAvatar = (ImageView) findViewById(R.id.character_avatar);
-        charNameTv = (TextView) findViewById(R.id.character_name_tv);
-        charClassTv = (TextView) findViewById(R.id.character_class);
-        charRaceTv = (TextView) findViewById(R.id.character_race);
-        charLevelTv = (TextView) findViewById(R.id.character_level);
+        yourCharacters = (RecyclerView) findViewById(R.id.your_characters);
+        // use a linear layout manager
+        mLayoutManager = new LinearLayoutManager(this);
+        yourCharacters.setLayoutManager(mLayoutManager);
+        yourCharacters.setItemAnimator(new DefaultItemAnimator());
+        yourCharacters.addItemDecoration(new DividerItemDecoration(CharacterActivity.this, null));
+
+
+        loadCharacters();
+
+
     }
 
 
@@ -80,68 +94,119 @@ public class CharacterActivity extends ActionBarActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.button_load_char) {
+        if (v.getId() == R.id.fab_add_character) {
+            startActivityForResult(new Intent(CharacterActivity.this, AddCharacterActivity.class), 1);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            //TODO: Refresh page
+            loadCharacters();
+        }
+    }
+
+    private void loadCharacters() {
+        myChars = new ArrayList<>();
+        new MyCharactersTask(new OnAsyncResultListener() {
+            @Override
+            public void onResult(String response) {
+                try {
+                    JSONObject jsonChars = new JSONObject(response);
+                    JSONArray myCharacters = jsonChars.getJSONArray("characters");
+                    for (int i = 0; i < myCharacters.length(); i++) {
+                        JSONObject tempChar = myCharacters.getJSONObject(i);
+                        int id = tempChar.getInt("id");
+                        int lastModified = tempChar.getInt("lastModified");
+                        String realm = tempChar.getString("realm");
+                        String battleGroup = tempChar.getString("battlegroup");
+                        int achievementPoints = tempChar.getInt("achievementPoints");
+                        int gender = tempChar.getInt("gender");
+                        String charName = tempChar.getString("name");
+                        String thumbnail = tempChar.getString("thumbnailurl");
+
+                        int charClass = tempChar.getInt("character_class");
+                        int race = tempChar.getInt("race");
+                        int level = tempChar.getInt("level");
+                        int itemlvlequipped = tempChar.getInt("itemlevelequipped");
+                        int itemlvltotal = tempChar.getInt("itemleveltotal");
+                        int userid = tempChar.getInt("user_id");
+
+                        myChars.add(new Character(id, lastModified, charName, realm,
+                                battleGroup, charClass, race, gender, level,
+                                achievementPoints, thumbnail, itemlvltotal,
+                                itemlvlequipped, userid));
+                    }
+                    updateCharacters();
+                    mAdapter = new CharacterListAdapter(myChars, CharacterActivity.this);
+                    mAdapter.setOnItemClickListener(new CharacterListAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Log.d("CharPosition", String.valueOf(position));
+                        }
+                    });
+                    yourCharacters.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        }).execute(String.valueOf(prefs.getInt("id", 0)));
+    }
+
+    private void updateCharacters() {
+        //TODO: Update Server Database with Records from Blizzard
+
+        for (int i = 0; i < myChars.size(); i++) {
+            final int finalI = i;
             new LoadCharacterDetailsTask(new OnAsyncResultListener() {
                 @Override
                 public void onResult(String response) {
                     try {
                         JSONObject jsonChar = new JSONObject(response);
-                        charNameTv.setText(jsonChar.getString("name"));
+                        int lastModified = jsonChar.getInt("lastModified");
+                        String realm = jsonChar.getString("realm");
+                        String battleGroup = jsonChar.getString("battlegroup");
+                        int achievementPoints = jsonChar.getInt("achievementPoints");
+                        int gender = jsonChar.getInt("gender");
+                        String charName = jsonChar.getString("name");
                         String thumbnail = jsonChar.getString("thumbnail");
                         String thumbnailUrl = "http://eu.battle.net/static-render/eu/" + thumbnail;
-                        Picasso.with(CharacterActivity.this).load(thumbnailUrl).into(charAvatar);
-                        final int charClass = jsonChar.getInt("class");
-                        new BlizzClassTask(new OnAsyncResultListener() {
-                            @Override
-                            public void onResult(String response) {
-                                try {
-                                    JSONObject jsonClasses = new JSONObject(response);
-                                    JSONArray classArray = jsonClasses.getJSONArray("classes");
-                                    for (int i = 0; i < classArray.length(); i++) {
-                                        JSONObject tempClass = classArray.getJSONObject(i);
-                                        if (tempClass.getInt("id") == charClass) {
-                                            charClassTv.setText(tempClass.getString("name"));
-                                        }
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-                            }
-                        }).execute();
-
-                        final int race = jsonChar.getInt("race");
-                        new BlizzRaceTask(new OnAsyncResultListener() {
-                            @Override
-                            public void onResult(String response) {
-                                try {
-                                    JSONObject jsonRaces = new JSONObject(response);
-                                    JSONArray raceArray = jsonRaces.getJSONArray("races");
-                                    for (int i = 0; i < raceArray.length(); i++) {
-                                        JSONObject tempRace = raceArray.getJSONObject(i);
-                                        if (tempRace.getInt("id") == race) {
-                                            charRaceTv.setText(tempRace.getString("name"));
-                                        }
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onError(Exception e) {
-
-                            }
-                        }).execute();
+                        int charClass = jsonChar.getInt("class");
+                        int race = jsonChar.getInt("race");
                         int level = jsonChar.getInt("level");
-                        charLevelTv.setText(String.valueOf(level));
-
                         JSONObject items = jsonChar.getJSONObject("items");
                         int itemlvlEquipped = items.getInt("averageItemLevelEquipped");
                         int itemlvlTotal = items.getInt("averageItemLevel");
+
+                        new UpdateCharacterTask(new OnAsyncResultListener() {
+                            @Override
+                            public void onResult(String response) {
+                                try {
+                                    JSONObject updateResult = new JSONObject(response);
+                                    if (updateResult.getInt("code") == 0) {
+                                        Log.d("Update successful", "update worked");
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Log.d("Update successful", "update failed");
+                            }
+                        }, new Character(myChars.get(finalI).id, lastModified, charName,
+                                realm, battleGroup, charClass, race, gender, level,
+                                achievementPoints, thumbnailUrl, itemlvlTotal, itemlvlEquipped,
+                                myChars.get(finalI).userid)).execute();
 
 
                     } catch (JSONException e) {
@@ -151,9 +216,8 @@ public class CharacterActivity extends ActionBarActivity implements View.OnClick
 
                 @Override
                 public void onError(Exception e) {
-                    Toast.makeText(CharacterActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                 }
-            }).execute(charServer.getText().toString(), charName.getText().toString());
+            }).execute(myChars.get(i).realm, myChars.get(i).name);
         }
     }
 }

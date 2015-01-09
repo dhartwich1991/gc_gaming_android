@@ -3,6 +3,7 @@ package com.jdapplications.gcgaming.tasks;
 import android.os.AsyncTask;
 
 import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
+import com.jdapplications.gcgaming.models.Character;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -22,28 +23,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by danielhartwich on 1/5/15.
+ * Created by danielhartwich on 1/7/15.
  */
-public class SignUpForRaidTask extends AsyncTask<String, String, String> {
+public class CreateCharacterTask extends AsyncTask<Void, String, String> {
     private OnAsyncResultListener listener;
+    private Character myNewChar;
     Exception error = null;
 
-    public SignUpForRaidTask(OnAsyncResultListener listener) {
+
+    public CreateCharacterTask(OnAsyncResultListener listener, Character character) {
         this.listener = listener;
+        this.myNewChar = character;
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(Void... params) {
         String responseString = null;
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse httpResponse;
-            HttpPost postRequest = new HttpPost("http://api.dotards.net:3000/api/v1/raids/sign_up");
+            HttpPost postRequest = new HttpPost("http://api.dotards.net:3000/api/v1/characters/create");
             List<NameValuePair> nvps = new ArrayList<>();
-            nvps.add(new BasicNameValuePair("id", params[0]));
-            nvps.add(new BasicNameValuePair("userid", params[1]));
-            nvps.add(new BasicNameValuePair("characterid", params[2]));
-            nvps.add(new BasicNameValuePair("role", params[3]));
+            nvps.add(new BasicNameValuePair("lastModified", String.valueOf(myNewChar.lastModified)));
+            nvps.add(new BasicNameValuePair("name", myNewChar.name));
+            nvps.add(new BasicNameValuePair("realm", myNewChar.realm));
+            nvps.add(new BasicNameValuePair("battlegroup", myNewChar.battlegroup));
+            nvps.add(new BasicNameValuePair("class", String.valueOf(myNewChar.charClass)));
+            nvps.add(new BasicNameValuePair("race", String.valueOf(myNewChar.race)));
+            nvps.add(new BasicNameValuePair("gender", String.valueOf(myNewChar.gender)));
+            nvps.add(new BasicNameValuePair("level", String.valueOf(myNewChar.level)));
+            nvps.add(new BasicNameValuePair("achievementPoints", String.valueOf(myNewChar.achievementPoints)));
+            nvps.add(new BasicNameValuePair("thumbnailurl", myNewChar.thumbNailUrl));
+            nvps.add(new BasicNameValuePair("itemleveltotal", String.valueOf(myNewChar.itemLevelTotal)));
+            nvps.add(new BasicNameValuePair("itemlevelequipped", String.valueOf(myNewChar.itemLevelEquipped)));
+            nvps.add(new BasicNameValuePair("userid", String.valueOf(myNewChar.userid)));
             postRequest.setEntity(new UrlEncodedFormEntity(nvps));
 
             httpResponse = httpClient.execute(postRequest);

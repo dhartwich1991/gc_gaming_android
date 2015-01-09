@@ -6,31 +6,29 @@ import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by danielhartwich on 1/5/15.
+ * Created by danielhartwich on 1/8/15.
  */
-public class SignUpForRaidTask extends AsyncTask<String, String, String> {
+public class MyCharactersTask  extends AsyncTask<String, String, String> {
     private OnAsyncResultListener listener;
+
     Exception error = null;
 
-    public SignUpForRaidTask(OnAsyncResultListener listener) {
+    public MyCharactersTask(OnAsyncResultListener listener) {
         this.listener = listener;
     }
+
 
     @Override
     protected String doInBackground(String... params) {
@@ -38,15 +36,9 @@ public class SignUpForRaidTask extends AsyncTask<String, String, String> {
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse httpResponse;
-            HttpPost postRequest = new HttpPost("http://api.dotards.net:3000/api/v1/raids/sign_up");
-            List<NameValuePair> nvps = new ArrayList<>();
-            nvps.add(new BasicNameValuePair("id", params[0]));
-            nvps.add(new BasicNameValuePair("userid", params[1]));
-            nvps.add(new BasicNameValuePair("characterid", params[2]));
-            nvps.add(new BasicNameValuePair("role", params[3]));
-            postRequest.setEntity(new UrlEncodedFormEntity(nvps));
+            HttpGet getRequest = new HttpGet("http://dotards.net:3000/api/v1/characters/mychars?userid="+params[0]);
 
-            httpResponse = httpClient.execute(postRequest);
+            httpResponse = httpClient.execute(getRequest);
             StatusLine statusLine = httpResponse.getStatusLine();
             if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
                 ByteArrayOutputStream out = new ByteArrayOutputStream();

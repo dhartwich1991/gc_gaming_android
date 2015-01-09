@@ -12,4 +12,16 @@
     <color name="confirmed_green">#259b24</color>
     <color name="pending_yellow">#ffeb3b</color>
     <color name="declined_red">#e51c23</color>
+
+    <color name="monk_jade_green">#00FF96</color>
+    <color name="paladin_pink">#F58CBA</color>
+    <color name="mage_light_blue">#69CCF0</color>
+    <color name="druid_orange">#FF7D0A</color>
+    <color name="hunter_green">#ABD473</color>
+    <color name="death_knight_red">#C41F3B</color>
+    <color name="priest_white">#FFFFFF</color>
+    <color name="rogue_light_yellow">#FFF569</color>
+    <color name="shaman_blue">#0070DE</color>
+    <color name="warlock_purple">#9482C9</color>
+    <color name="warrior_tan">#C79C6E</color>
 </resources>

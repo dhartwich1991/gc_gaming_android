@@ -34,7 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AvailableRaidsActivity extends ActionBarActivity implements AdapterView.OnItemClickListener, View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
+public class AvailableRaidsActivity extends ActionBarActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView availableRaidsView;
     private RecyclerView.LayoutManager mLayoutManager;
@@ -140,11 +140,6 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fab_add_event) {
             startActivityForResult(new Intent(AvailableRaidsActivity.this, CreateEventActivity.class), 1);
@@ -220,7 +215,6 @@ public class AvailableRaidsActivity extends ActionBarActivity implements Adapter
     private void selectItem(int position) {
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
-        setTitle(mMenuItems[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
         mDrawerLayout.closeDrawers();
 

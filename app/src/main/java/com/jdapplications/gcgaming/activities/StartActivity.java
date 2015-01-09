@@ -51,6 +51,7 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
             task = new LoginTask(asyncListener);
             task.execute(sharedPref.getString("username", null), sharedPref.getString("password", null));
             loginSubmitButton.setEnabled(false);
+
         }
     }
 
