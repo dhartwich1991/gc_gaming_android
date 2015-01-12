@@ -108,8 +108,16 @@
                     android:layout_below="@id/member_list_header"
                     android:scrollbars="vertical"
                     android:layout_width="match_parent"
+                    android:visibility="gone"
                     android:layout_height="200dp"
                     android:layout_alignParentBottom="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/linear_full_list"
+                    android:layout_below="@id/raid_members" />
 
             </RelativeLayout>
 

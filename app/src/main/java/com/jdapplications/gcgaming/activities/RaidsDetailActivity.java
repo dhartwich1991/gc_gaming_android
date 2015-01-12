@@ -15,6 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,13 +33,27 @@ import com.jdapplications.gcgaming.tasks.SignOffForRaidTask;
 import com.jdapplications.gcgaming.tasks.SignUpForRaidTask;
 import com.jdapplications.gcgaming.ui.DividerItemDecoration;
 import com.jdapplications.gcgaming.ui.FloatingActionButton;
+import com.jdapplications.gcgaming.ui.RoundImageView;
 import com.jdapplications.gcgaming.utils.DateFormatter;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import static com.jdapplications.gcgaming.utils.BlizzClasses.DEATH_KNIGHT;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.DRUID;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.HUNTER;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.MAGE;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.MONK;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.PALADIN;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.PRIEST;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.ROGUE;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.SHAMAN;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.WARLOCK;
+import static com.jdapplications.gcgaming.utils.BlizzClasses.WARRIOR;
 
 public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncResultListener, FloatingActionButton.OnCheckedChangeListener {
 
@@ -51,6 +67,8 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
     private ArrayList<User> raidMembersList;
     private SharedPreferences sharedPref;
     private String raidId;
+
+    private LinearLayout raidersList;
 
     public ArrayList<Character> chars;
     private boolean isSignedUp;
@@ -70,6 +88,8 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
         raidLead = (TextView) findViewById(R.id.raid_lead);
         raidStart = (TextView) findViewById(R.id.raid_start);
         raidEnd = (TextView) findViewById(R.id.raid_end);
+
+        raidersList = (LinearLayout) findViewById(R.id.linear_full_list);
 
         mLayoutManager = new LinearLayoutManager(this);
         raidMembers = (RecyclerView) findViewById(R.id.raid_members);
@@ -236,12 +256,106 @@ public class RaidsDetailActivity extends ActionBarActivity implements OnAsyncRes
             raidMembers.setAdapter(adapter);
             adapter.notifyDataSetChanged();
 
+            raidersList.removeAllViews();
+            for (int i = 0; i < raidMembersList.size(); i++) {
+                /**
+                 * inflate items/ add items in linear layout instead of listview
+                 */
+                LayoutInflater inflater = null;
+                inflater = (LayoutInflater) getApplicationContext()
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View mLinearView = inflater.inflate(R.layout.entry_raid_details_members, null);
+
+                View mSeperatorView = inflater.inflate(R.layout.seperator_list, null);
+                /**
+                 * getting id of row.xml
+                 */
+                TextView characterUser = (TextView) mLinearView.findViewById(R.id.character_user);
+                ImageView memberStatus = (ImageView) mLinearView.findViewById(R.id.invitation_status);
+                RoundImageView characterThumbnail = (RoundImageView) mLinearView.findViewById(R.id.character_image);
+                ImageView characterRole = (ImageView) mLinearView.findViewById(R.id.character_spec);
+                TextView characterName = (TextView) mLinearView.findViewById(R.id.character_name);
+                TextView characterServer = (TextView) mLinearView.findViewById(R.id.character_server);
+                TextView charClass = (TextView) mLinearView.findViewById(R.id.character_class);
+                TextView characterGearscore = (TextView) mLinearView.findViewById(R.id.character_gearscore);
+
+                User tempUser = raidMembersList.get(i);
+                Character tempChar = tempUser.character;
+                Picasso.with(RaidsDetailActivity.this).load(tempChar.thumbNailUrl).into(characterThumbnail);
+                characterUser.setText("by " + tempUser.username);
+                characterName.setText(tempChar.name);
+                characterServer.setText(tempChar.realm);
+
+                switch (tempChar.role) {
+                    case "Tank":
+                        characterRole.setImageDrawable(RaidsDetailActivity.this.getResources().getDrawable(R.drawable.tank_icon));
+                        break;
+                    case "Heal":
+                        characterRole.setImageDrawable(RaidsDetailActivity.this.getResources().getDrawable(R.drawable.heal_icon));
+                        break;
+                    case "Damage":
+                        characterRole.setImageDrawable(RaidsDetailActivity.this.getResources().getDrawable(R.drawable.damage_icon));
+                        break;
+                }
+                String gearscore = tempChar.itemLevelEquipped + " ( " + tempChar.itemLevelTotal + " )";
+                characterGearscore.setText(gearscore);
+
+                switch (tempChar.charClass) {
+                    case HUNTER:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.hunter_green));
+                        charClass.setText("Hunter");
+                        break;
+                    case ROGUE:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.rogue_light_yellow));
+                        charClass.setText("Rogue");
+                        break;
+                    case WARRIOR:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.warrior_tan));
+                        charClass.setText("Warrior");
+                        break;
+                    case PALADIN:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.paladin_pink));
+                        charClass.setText("Paladin");
+                        break;
+                    case SHAMAN:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.shaman_blue));
+                        charClass.setText("Shaman");
+                        break;
+                    case MAGE:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.mage_light_blue));
+                        charClass.setText("Mage");
+                        break;
+                    case PRIEST:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.priest_white));
+                        charClass.setText("Priest");
+                        break;
+                    case DEATH_KNIGHT:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.death_knight_red));
+                        charClass.setText("Death Knight");
+                        break;
+                    case DRUID:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.druid_orange));
+                        charClass.setText("Druid");
+                        break;
+                    case WARLOCK:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.warlock_purple));
+                        charClass.setText("Warlock");
+                        break;
+                    case MONK:
+                        charClass.setTextColor(RaidsDetailActivity.this.getResources().getColor(R.color.monk_jade_green));
+                        charClass.setText("Monk");
+                }
+                raidersList.addView(mLinearView);
+                if (i < raidMembersList.size()-1) {
+                    raidersList.addView(mSeperatorView);
+                }
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //Load Raid Members
-        raidMembersList = new ArrayList<>();
+
 
     }
 

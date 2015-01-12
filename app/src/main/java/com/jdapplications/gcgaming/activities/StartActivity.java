@@ -3,6 +3,9 @@ package com.jdapplications.gcgaming.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,13 +17,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.jdapplications.gcgaming.R;
 import com.jdapplications.gcgaming.listener.OnAsyncResultListener;
+import com.jdapplications.gcgaming.tasks.GCMSendRegistrationIDToServer;
 import com.jdapplications.gcgaming.tasks.LoginTask;
-import com.jdapplications.gcgaming.tasks.RegisterTask;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.IOException;
 
 public class StartActivity extends ActionBarActivity implements View.OnClickListener, OnAsyncResultListener {
     private TextView registerTextView;
@@ -31,6 +39,8 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
     private JSONObject jsonResponse;
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,12 +57,13 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
         sharedPref = getApplicationContext().getSharedPreferences("com.jdapplications.gcgaming", Context.MODE_PRIVATE);
         editor = sharedPref.edit();
 
+
         if (sharedPref.getString("access_token", null) != null) {
             task = new LoginTask(asyncListener);
             task.execute(sharedPref.getString("username", null), sharedPref.getString("password", null));
             loginSubmitButton.setEnabled(false);
-
         }
+
     }
 
 
@@ -113,6 +124,7 @@ public class StartActivity extends ActionBarActivity implements View.OnClickList
                         editor.commit();
                     }
                     Toast.makeText(StartActivity.this, "Welcome, " + loginUser.getString("username"), Toast.LENGTH_SHORT).show();
+
                     startActivity(new Intent(StartActivity.this, AvailableRaidsActivity.class));
                 }
             } catch (JSONException e) {

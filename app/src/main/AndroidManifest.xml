@@ -1,17 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jdapplications.gcgaming" >
+    package="com.jdapplications.gcgaming">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <permission
+        android:name="com.example.gcm.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <receiver
+            android:name=".broadcastreceivers.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.example.gcm" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".services.GcmIntentService" />
+
         <activity
             android:name=".activities.StartActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,28 +48,24 @@
             android:label="@string/title_activity_available_raids" />
         <activity
             android:name=".activities.CreateEventActivity"
-            android:label="@string/title_activity_create_event" >
-        </activity>
+            android:label="@string/title_activity_create_event"></activity>
         <activity
             android:name=".activities.RaidsDetailActivity"
             android:label="@string/title_activity_raids_detail"
-            android:parentActivityName=".activities.AvailableRaidsActivity" >
+            android:parentActivityName=".activities.AvailableRaidsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jdapplications.gcgaming.activities.AvailableRaidsActivity" />
         </activity>
         <activity
             android:name=".activities.CharacterActivity"
-            android:label="@string/title_activity_character" >
-        </activity>
+            android:label="@string/title_activity_character"></activity>
         <activity
             android:name=".activities.ProfileActivity"
-            android:label="@string/title_activity_profile" >
-        </activity>
+            android:label="@string/title_activity_profile"></activity>
         <activity
             android:name=".activities.AddCharacterActivity"
-            android:label="@string/title_activity_add_character" >
-        </activity>
+            android:label="@string/title_activity_add_character"></activity>
     </application>
 
 </manifest>
