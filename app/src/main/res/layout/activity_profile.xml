@@ -1,12 +1,227 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.jdapplications.gcgaming.activities.ProfileActivity">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        tools:context="com.jdapplications.gcgaming.activities.ProfileActivity">
 
-</RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Username"
+            android:textStyle="bold"
+            android:id="@+id/profile_username_label"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username of Account"
+            android:id="@+id/profile_username"
+            android:layout_below="@+id/profile_username_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="E-Mail"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_email_label"
+            android:layout_below="@+id/profile_username"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="E-Mail of Account"
+            android:id="@+id/profile_email"
+            android:layout_below="@+id/profile_email_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Admin"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_admin_label"
+            android:layout_below="@+id/profile_email"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AdminStatus of Account"
+            android:id="@+id/profile_admin"
+            android:layout_below="@+id/profile_admin_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Moderator"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_moderator_label"
+            android:layout_below="@+id/profile_admin"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ModeratorStatus of Account"
+            android:id="@+id/profile_moderator"
+            android:layout_below="@+id/profile_moderator_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Access Token"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_access_token_label"
+            android:layout_below="@+id/profile_moderator"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="AccessToken of Account"
+            android:id="@+id/profile_access_token"
+            android:layout_below="@+id/profile_access_token_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Created at"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_created_at_label"
+            android:layout_below="@+id/profile_access_token"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CreatedAt of Account"
+            android:id="@+id/profile_created_at"
+            android:layout_below="@+id/profile_created_at_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Updated at"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_updated_at_label"
+            android:layout_below="@+id/profile_created_at"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UpdatedAt of Account"
+            android:id="@+id/profile_updated_at"
+            android:layout_below="@+id/profile_updated_at_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="GCM Registration ID"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_gcm_id_label"
+            android:layout_below="@+id/profile_updated_at"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GCM ID of Account"
+            android:id="@+id/profile_gcm_id"
+            android:layout_below="@+id/profile_gcm_id_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="App Version"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_app_version_label"
+            android:layout_below="@+id/profile_gcm_id"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Current App Version"
+            android:id="@+id/profile_app_version"
+            android:layout_below="@+id/profile_app_version_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="User ID"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:id="@+id/profile_user_id_label"
+            android:layout_below="@+id/profile_app_version"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UserID of Account"
+            android:id="@+id/profile_user_id"
+            android:layout_below="@+id/profile_user_id_label"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+</ScrollView>

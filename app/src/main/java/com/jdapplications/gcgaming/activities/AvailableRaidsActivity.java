@@ -99,7 +99,7 @@ public class AvailableRaidsActivity extends ActionBarActivity implements View.On
             Log.i(TAG, "No valid Google Play Services APK found.");
         }
 
-        mMenuItems = new String[]{"Raids", "Character", "Profile"};
+        mMenuItems = new String[]{"Character", "Profile"};
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, mMenuItems));
@@ -268,13 +268,10 @@ public class AvailableRaidsActivity extends ActionBarActivity implements View.On
 
         switch (position) {
             case 0:
-                //Do nothing we are already in that activity
-                return;
-            case 1:
                 Intent i = new Intent(AvailableRaidsActivity.this, CharacterActivity.class);
                 startActivity(i);
                 return;
-            case 2:
+            case 1:
                 Intent j = new Intent(AvailableRaidsActivity.this, ProfileActivity.class);
                 startActivity(j);
                 return;
