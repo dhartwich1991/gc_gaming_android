@@ -139,6 +139,7 @@
                     android:layout_height="@dimen/fab_icon_size"
                     android:src="@drawable/fab_sign_raid_icons"
                     android:layout_gravity="center"
+                    android:tint="@android:color/white"
                     android:duplicateParentState="true" />
 
             </com.jdapplications.gcgaming.ui.FloatingActionButton>

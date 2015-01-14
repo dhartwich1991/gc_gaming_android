@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/accent_color" />
+        </shape>
+    </item>
+    <item>
+        <bitmap android:src="@drawable/shadow" />
+    </item>
+
+</layer-list>
+
+    <!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">--><!--<item>--><!--<selector>--><!--<item android:state_focused="true" android:state_pressed="true">--><!--<shape android:shape="oval">--><!--<size android:width="@dimen/fab_size" android:height="@dimen/fab_size" />--><!--<solid android:color="@color/accent_color_dark" />--><!--</shape>--><!--</item>--><!--<item android:state_pressed="true" android:state_focused="false">--><!--<shape android:shape="oval">--><!--<size android:width="@dimen/fab_size" android:height="@dimen/fab_size" />--><!--<solid android:color="@color/accent_color_dark" />--><!--</shape>--><!--</item>--><!--<item>--><!--<shape android:shape="oval">--><!--<size android:width="@dimen/fab_size" android:height="@dimen/fab_size" />--><!--<solid android:color="@color/accent_color" />--><!--</shape>--><!--</item>-->
+
+    <!--</selector>--><!--</item>--><!--<item>--><!--<bitmap android:src="@drawable/shadow">--><!--<size android:width="@dimen/fab_size" android:height="@dimen/fab_size" />--><!--</bitmap>--><!--</item>-->
+
+    <!--</layer-list>-->

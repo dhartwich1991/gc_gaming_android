@@ -59,7 +59,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Load Character"
+        android:text="@string/load_character"
         android:id="@+id/button_load_char"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
@@ -68,7 +68,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Class"
+        android:text="@string/character_class"
         android:textStyle="bold"
         android:id="@+id/character_class_label"
         android:layout_below="@+id/character_name_tv"
@@ -86,7 +86,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="Race"
+        android:text="@string/race"
         android:id="@+id/character_race_label"
         android:layout_below="@+id/character_class"
         android:layout_alignParentLeft="true"
@@ -139,7 +139,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save Character"
+        android:text="@string/save_character"
         android:enabled="false"
         android:id="@+id/button_save_char"
         android:layout_alignParentBottom="true"

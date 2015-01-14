@@ -3,6 +3,7 @@ package com.jdapplications.gcgaming.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -33,13 +34,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class CharacterActivity extends ActionBarActivity implements View.OnClickListener {
+public class CharacterActivity extends ActionBarActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private FloatingActionButton fab;
     private RecyclerView yourCharacters;
     private RecyclerView.LayoutManager mLayoutManager;
     private SharedPreferences prefs;
     private CharacterListAdapter mAdapter;
+
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     private ArrayList<Character> myChars;
 
@@ -61,6 +64,9 @@ public class CharacterActivity extends ActionBarActivity implements View.OnClick
         yourCharacters.setLayoutManager(mLayoutManager);
         yourCharacters.setItemAnimator(new DefaultItemAnimator());
         yourCharacters.addItemDecoration(new DividerItemDecoration(CharacterActivity.this, null));
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefresh);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
 
         loadCharacters();
@@ -219,5 +225,63 @@ public class CharacterActivity extends ActionBarActivity implements View.OnClick
                 }
             }).execute(myChars.get(i).realm, myChars.get(i).name);
         }
+    }
+
+    @Override
+    public void onRefresh() {
+        loadCharactersWithoutUpdating();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void loadCharactersWithoutUpdating() {
+        myChars = new ArrayList<>();
+        new MyCharactersTask(new OnAsyncResultListener() {
+            @Override
+            public void onResult(String response) {
+                try {
+                    JSONObject jsonChars = new JSONObject(response);
+                    JSONArray myCharacters = jsonChars.getJSONArray("characters");
+                    for (int i = 0; i < myCharacters.length(); i++) {
+                        JSONObject tempChar = myCharacters.getJSONObject(i);
+                        int id = tempChar.getInt("id");
+                        int lastModified = tempChar.getInt("lastModified");
+                        String realm = tempChar.getString("realm");
+                        String battleGroup = tempChar.getString("battlegroup");
+                        int achievementPoints = tempChar.getInt("achievementPoints");
+                        int gender = tempChar.getInt("gender");
+                        String charName = tempChar.getString("name");
+                        String thumbnail = tempChar.getString("thumbnailurl");
+
+                        int charClass = tempChar.getInt("character_class");
+                        int race = tempChar.getInt("race");
+                        int level = tempChar.getInt("level");
+                        int itemlvlequipped = tempChar.getInt("itemlevelequipped");
+                        int itemlvltotal = tempChar.getInt("itemleveltotal");
+                        int userid = tempChar.getInt("user_id");
+
+                        myChars.add(new Character(id, lastModified, charName, realm,
+                                battleGroup, charClass, race, gender, level,
+                                achievementPoints, thumbnail, itemlvltotal,
+                                itemlvlequipped, userid));
+                    }
+                    mAdapter = new CharacterListAdapter(myChars, CharacterActivity.this);
+                    mAdapter.setOnItemClickListener(new CharacterListAdapter.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(View view, int position) {
+                            Log.d("CharPosition", String.valueOf(position));
+                        }
+                    });
+                    yourCharacters.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+
+            }
+        }).execute(String.valueOf(prefs.getInt("id", 0)));
     }
 }

@@ -45,6 +45,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
+            android:elevation="@dimen/fab_elevation"
             android:background="@drawable/fab_background"
             android:stateListAnimator="@animator/fab_anim"
             android:clickable="false">

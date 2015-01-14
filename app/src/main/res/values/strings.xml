@@ -13,5 +13,11 @@
     <string name="title_activity_character">Your characters</string>
     <string name="title_activity_profile">Profile</string>
     <string name="title_activity_add_character">Add new character</string>
+    <string name="updated_at">Updated at</string>
+    <string name="created_at">Created at</string>
+    <string name="save_character">Save Character</string>
+    <string name="race">Race</string>
+    <string name="character_class">Class</string>
+    <string name="load_character">Load Character</string>
 
 </resources>

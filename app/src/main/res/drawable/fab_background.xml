@@ -15,15 +15,28 @@
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:state_checked="true">
+    <item android:state_focused="true" android:state_pressed="true">
         <shape android:shape="oval">
-            <solid android:color="@color/accent_color" />
+            <solid android:color="@color/accent_color_dark" />
+        </shape>
+        <shape android:shape="oval">
+            <solid android:background="@drawable/shadow" />
         </shape>
     </item>
-
+    <item android:state_pressed="true" android:state_focused="false">
+        <shape android:shape="oval">
+            <solid android:color="@color/accent_color_dark" />
+        </shape>
+        <shape android:shape="oval">
+            <solid android:background="@drawable/shadow" />
+        </shape>
+    </item>
     <item>
         <shape android:shape="oval">
             <solid android:color="@color/accent_color" />
+        </shape>
+        <shape android:shape="oval">
+            <solid android:background="@drawable/shadow" />
         </shape>
     </item>
 
